@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - OnibusCuiaba</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif; }
+    body {
+      background-image:url('Cuiaba.jpg');
+      background-repeat:no-repeat;
+      background-position:center center;
+      background-attachment:fixed;
+      background-size:cover;
+    }
+    .navbar {
+      background-color:rgba(52,152,219,0.8);
+      padding:15px 30px;
+      color:white;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+    .navbar h2 { font-size:24px; font-weight:bold; }
+    .nav-buttons { display:flex; gap:10px; }
+    .nav-buttons button {
+      background:white; color:#3498db; border:none;
+      padding:10px 20px; border-radius:20px;
+      font-weight:bold; cursor:pointer; transition:0.3s;
+    }
+    .nav-buttons button:hover { background:#d6eaf8; }
+    .form-box {
+      background:rgba(255,255,255,0.85);
+      padding:30px; border-radius:10px;
+      box-shadow:0 0 15px rgba(0,0,0,0.1);
+      width:300px; margin:40px auto;
+    }
+    .form-box h2 { text-align:center; color:#3498db; }
+    .form-box input {
+      width:100%; padding:10px; margin:10px 0;
+      border-radius:6px; border:1px solid #ccc;
+    }
+    .form-box button {
+      width:100%; padding:10px;
+      background:#3498db; color:white; font-weight:bold;
+      border:none; border-radius:6px; cursor:pointer;
+      margin-top:10px;
+    }
+    .form-box button:hover { background:#1b4f72; }
+    .link { text-align:center; margin-top:15px; }
+    .link a { text-decoration:none; color:#3498db; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h2>OnibusCuiabá</h2>
+    <div class="nav-buttons">
+      <button onclick="location.href='login.html'">Entrar</button>
+      <button onclick="location.href='registrar.html'">Registrar</button>
+    </div>
+  </div>
+
+  <div class="form-box">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="E-mail" />
+    <input type="password" id="senha" placeholder="Senha" />
+    <button onclick="login()">Entrar</button>
+    <div class="link">
+      <a href="registrar.html">Não tem conta? Registrar</a>
+    </div>
+  </div>
+
+  <script>
+    // inicializa admin se não existir nenhum usuário
+    if (!localStorage.getItem('usuarios')) {
+      localStorage.setItem('usuarios',
+        JSON.stringify([{
+          nome: 'Admin',
+          email: 'admin@site.com',
+          senha: 'admin123',
+          role: 'admin'
+        }])
+      );
+    }
+
+    function login() {
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      let usuarios = []; // Inicializa como um array vazio
+      try {
+        const usuariosString = localStorage.getItem('usuarios');
+        if (usuariosString) {
+          const parsedUsers = JSON.parse(usuariosString);
+          // Garante que o que foi parseado é realmente um array
+          if (Array.isArray(parsedUsers)) {
+            usuarios = parsedUsers;
+          } else {
+            console.warn("O valor de 'usuarios' no localStorage não é um array. Reinicializando.");
+            // Se não for um array, ele permanecerá como um array vazio, o que é seguro.
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao carregar ou analisar 'usuarios' do localStorage:", e);
+        // Em caso de erro na análise, 'usuarios' permanecerá como um array vazio.
+      }
+
+      const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+      if (!usuario) {
+        alert('E-mail ou senha incorretos!');
+        return;
+      }
+
+      // grava usuário logado e redireciona conforme role
+      localStorage.setItem('loggedUser', JSON.stringify(usuario));
+      location.href = usuario.role === 'admin'
+        ? 'admin.html'
+        : 'perfil.html'; // Redireciona para perfil.html se não for admin
+    }
+  </script>
+</body>
+</html>

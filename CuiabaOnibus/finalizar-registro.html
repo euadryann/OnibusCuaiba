@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finalizar Registro – ÔnibusCuiabá</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif; }
+    body {
+      background:#f0f2f5 url('Cuiaba.jpg') center/cover fixed;
+      color:#333;
+    }
+    .navbar {
+      display:flex; align-items:center;
+      background:rgba(52,152,219,0.8); padding:15px 30px; color:#fff;
+    }
+    .navbar h2 { font-size:24px; font-weight:bold; }
+    .nav-buttons { display:flex; gap:10px; margin-left:20px; }
+    .navbar button {
+      background:#fff; color:#3498db; border:none;
+      padding:8px 16px; border-radius:20px; font-weight:bold; cursor:pointer;
+      transition:background-color .3s;
+    }
+    .navbar button:hover { background:#d6eaf8; }
+    #logout-btn {
+      margin-left:auto;
+      background:#e74c3c; color:#fff;
+    }
+    #logout-btn:hover { background:#c0392b; }
+    #welcome-msg { margin-left:10px; font-weight:bold; }
+    .container {
+      background:rgba(255,255,255,0.9);
+      max-width:600px; margin:40px auto; padding:30px;
+      border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.1);
+    }
+    .container h1 { text-align:center; color:#3498db; margin-bottom:20px; }
+    .profile-field { margin:15px 0; }
+    .profile-field label { display:block; font-weight:bold; margin-bottom:5px; }
+    .profile-field input, .profile-field select {
+      width:100%; padding:10px; border:1px solid #ccc;
+      border-radius:6px; background:#fff; display:block;
+    }
+    #save-btn, #view-info-btn {
+      margin-top:20px; padding:12px 20px; border:none;
+      background:#3498db; color:#fff; border-radius:6px; cursor:pointer;
+      width:100%; font-size:16px;
+    }
+    #save-btn:hover, #view-info-btn:hover { background:#1b4f72; }
+    #view-info-btn { background:#2ecc71; }
+    #view-info-btn:hover { background:#27ae60; }
+    .hidden { display: none; }
+    .section-title {
+      font-size:18px; color:#3498db; margin:25px 0 15px 0;
+      padding-bottom:5px; border-bottom:1px solid #eee;
+    }
+    .card-icons {
+      display:flex; gap:10px; margin:10px 0;
+    }
+    .card-icons img {
+      height:30px; width:auto; opacity:0.5;
+    }
+    .card-icons img.active {
+      opacity:1;
+    }
+    .card-group {
+      display:flex; gap:10px;
+    }
+    .card-group .profile-field {
+      flex:1;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h2>ÔnibusCuiabá</h2>
+    <div class="nav-buttons">
+      <button onclick="window.location.href='agendamentodeviagem.html'">Agendar Viagem</button>
+      <button onclick="window.location.href='Historicodeviagem.html'">Historico de Aviagem</button>
+    </div>
+    <button id="logout-btn">Sair</button>
+    <div id="welcome-msg"></div>
+  </div>
+
+  <div class="container">
+    <h1>Finalizar Registro</h1>
+    <form id="register-form">
+      <div class="section-title">Informações Pessoais</div>
+      <div class="profile-field">
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" required />
+      </div>
+      <div class="profile-field">
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" required />
+      </div>
+      <div class="profile-field">
+        <label for="estado">Estado:</label>
+        <select id="estado" required>
+          <option value="">Selecione...</option>
+          <option value="MT">Mato Grosso</option>
+          <option value="MS">Mato Grosso do Sul</option>
+          <!-- Adicione outros estados conforme necessário -->
+        </select>
+      </div>
+      <div class="profile-field">
+        <label for="cep">CEP:</label>
+        <input type="text" id="cep" required />
+      </div>
+
+      <div class="section-title">Informações de Pagamento</div>
+
+      <div class="profile-field">
+        <label for="card-number">Número do Cartão:</label>
+        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required />
+      </div>
+
+      <div class="card-group">
+        <div class="profile-field">
+          <label for="card-name">Nome no Cartão:</label>
+          <input type="text" id="card-name" placeholder="Como no cartão" required />
+        </div>
+        <div class="profile-field">
+          <label for="card-cvv">CVV:</label>
+          <input type="text" id="card-cvv" placeholder="123" required />
+        </div>
+      </div>
+
+      <div class="card-group">
+        <div class="profile-field">
+          <label for="card-expiry">Validade:</label>
+          <input type="text" id="card-expiry" placeholder="MM/AA" required />
+        </div>
+        <div class="profile-field">
+          <label for="card-cpf">CPF do Titular:</label>
+          <input type="text" id="card-cpf" placeholder="000.000.000-00" required />
+        </div>
+      </div>
+
+      <button type="submit" id="save-btn">Salvar Informações</button>
+    </form>
+
+    <div id="info-display" class="hidden">
+      <div class="section-title">Informações Pessoais</div>
+      <div class="profile-field">
+        <label>Endereço:</label>
+        <span id="endereco-display"></span>
+      </div>
+      <div class="profile-field">
+        <label>Cidade:</label>
+        <span id="cidade-display"></span>
+      </div>
+      <div class="profile-field">
+        <label>Estado:</label>
+        <span id="estado-display"></span>
+      </div>
+      <div class="profile-field">
+        <label>CEP:</label>
+        <span id="cep-display"></span>
+      </div>
+
+      <div class="section-title">Informações de Pagamento</div>
+      <div class="profile-field">
+        <label>Cartão:</label>
+        <span id="card-display"></span>
+      </div>
+      <div class="profile-field">
+        <label>Nome no Cartão:</label>
+        <span id="card-name-display"></span>
+      </div>
+      <div class="profile-field">
+        <label>Validade:</label>
+        <span id="card-expiry-display"></span>
+      </div>
+
+      <button id="view-info-btn" onclick="window.location.href='perfil.html'">Voltar para o Perfil</button>
+    </div>
+  </div>
+
+  <script>
+    let loggedUser = null;
+
+    // Carrega o usuário logado
+    try {
+      const userString = localStorage.getItem('loggedUser');
+      if (userString) {
+        loggedUser = JSON.parse(userString);
+      }
+    } catch (e) {
+      console.error("Erro ao analisar 'loggedUser' do localStorage:", e);
+    }
+
+    if (!loggedUser) {
+      alert("Você não está logado.");
+      location.href = "login.html";
+    } else {
+      document.getElementById("welcome-msg").textContent = `Bem-vindo, ${loggedUser.nome}`;
+
+      // Verifica se já tem informações de registro
+      if (loggedUser.endereco) {
+        showRegisteredInfo();
+      }
+
+      // Formatação automática dos campos
+      document.getElementById("cep").addEventListener("input", function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 5) {
+          value = value.substring(0,5) + '-' + value.substring(5,8);
+        }
+        e.target.value = value;
+      });
+
+      document.getElementById("card-number").addEventListener("input", function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        e.target.value = value.trim();
+        detectCardType(value);
+      });
+
+      document.getElementById("card-cpf").addEventListener("input", function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 3) {
+          value = value.substring(0,3) + '.' + value.substring(3);
+        }
+        if (value.length > 7) {
+          value = value.substring(0,7) + '.' + value.substring(7);
+        }
+        if (value.length > 11) {
+          value = value.substring(0,11) + '-' + value.substring(11,13);
+        }
+        e.target.value = value;
+      });
+
+      document.getElementById("card-expiry").addEventListener("input", function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) {
+          value = value.substring(0,2) + '/' + value.substring(2,4);
+        }
+        e.target.value = value;
+      });
+
+      document.getElementById("register-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Salva as informações pessoais
+        loggedUser.endereco = document.getElementById("endereco").value;
+        loggedUser.cidade = document.getElementById("cidade").value;
+        loggedUser.estado = document.getElementById("estado").value;
+        loggedUser.cep = document.getElementById("cep").value;
+
+        // Salva as informações do cartão (em um sistema real, isso seria criptografado)
+        loggedUser.cardNumber = document.getElementById("card-number").value;
+        loggedUser.cardName = document.getElementById("card-name").value;
+        loggedUser.cardExpiry = document.getElementById("card-expiry").value;
+        loggedUser.cardCpf = document.getElementById("card-cpf").value;
+
+        localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
+
+        showRegisteredInfo();
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        localStorage.removeItem("loggedUser");
+        location.href = "index.html";
+      });
+    }
+
+    function showRegisteredInfo() {
+      document.getElementById("register-form").classList.add("hidden");
+      document.getElementById("info-display").classList.remove("hidden");
+
+      // Mostra informações pessoais
+      document.getElementById("endereco-display").textContent = loggedUser.endereco;
+      document.getElementById("cidade-display").textContent = loggedUser.cidade;
+      document.getElementById("estado-display").textContent = loggedUser.estado;
+      document.getElementById("cep-display").textContent = loggedUser.cep;
+
+      // Mostra informações do cartão (mostrando apenas os últimos 4 dígitos por segurança)
+      const last4 = loggedUser.cardNumber ? loggedUser.cardNumber.slice(-4) : '';
+      document.getElementById("card-display").textContent = `**** **** **** ${last4}`;
+      document.getElementById("card-name-display").textContent = loggedUser.cardName;
+      document.getElementById("card-expiry-display").textContent = loggedUser.cardExpiry;
+    }
+
+    function detectCardType(number) {
+      // Limpa todas as classes active primeiro
+      document.querySelectorAll('.card-icons img').forEach(img => {
+        img.classList.remove('active');
+      });
+
+      // Detecta o tipo de cartão (simplificado)
+      const cleanNumber = number.replace(/\D/g, '');
+
+      if (/^4/.test(cleanNumber)) {
+        document.getElementById("visa-icon").classList.add('active');
+      } else if (/^5[1-5]/.test(cleanNumber)) {
+        document.getElementById("mastercard-icon").classList.add('active');
+      } else if (/^3[47]/.test(cleanNumber)) {
+        document.getElementById("amex-icon").classList.add('active');
+      }
+    }
+  </script>
+</body>
