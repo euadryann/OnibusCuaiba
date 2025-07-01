@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil – ÔnibusCuiabá</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif; }
+    body {
+      background:#f0f2f5 url('Cuiaba.jpg') center/cover fixed;
+      color:#333;
+    }
+    .navbar {
+      display:flex; align-items:center;
+      background:rgba(52,152,219,0.8); padding:15px 30px; color:#fff;
+    }
+    .navbar h2 { font-size:24px; font-weight:bold; }
+    .nav-buttons { display:flex; gap:10px; margin-left:20px; }
+    .navbar button {
+      background:#fff; color:#3498db; border:none;
+      padding:8px 16px; border-radius:20px; font-weight:bold; cursor:pointer;
+      transition:background-color .3s;
+    }
+    .navbar button:hover { background:#d6eaf8; }
+    #logout-btn {
+      margin-left:auto;
+      background:#e74c3c; color:#fff;
+    }
+    #logout-btn:hover { background:#c0392b; }
+    #welcome-msg { margin-left:10px; font-weight:bold; }
+    .container {
+      background:rgba(255,255,255,0.9);
+      max-width:600px; margin:40px auto; padding:30px;
+      border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.1);
+    }
+    .container h1 { text-align:center; color:#3498db; margin-bottom:20px; }
+    .profile-field { margin:15px 0; }
+    .profile-field label { display:block; font-weight:bold; margin-bottom:5px; }
+    .profile-field span,
+    .profile-field input {
+      width:100%; padding:10px; border:1px solid #ccc;
+      border-radius:6px; background:#f7f9fa; display:block;
+    }
+    .profile-field input { background:#fff; }
+    #save-btn, #finish-register-btn {
+      margin-top:10px; padding:10px 20px; border:none;
+      background:#3498db; color:#fff; border-radius:6px; cursor:pointer;
+      width:100%;
+    }
+    #save-btn:hover, #finish-register-btn:hover { background:#1b4f72; }
+    #finish-register-btn { background:#2ecc71; margin-top:10px; }
+    #finish-register-btn:hover { background:#27ae60; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h2>ÔnibusCuiabá</h2>
+    <div class="nav-buttons">
+      <button onclick="window.location.href='agendamentodeviagem.html'">Agendar Viagem</button>
+      <button onclick="window.location.href='Historicodeviagem.html'">Historico de Aviagem</button>
+    </div>
+    <button id="logout-btn">Sair</button>
+    <div id="welcome-msg"></div>
+  </div>
+
+  <div class="container">
+    <h1>Meu Perfil</h1>
+    <div class="profile-field">
+      <label>Nome:</label>
+      <span id="nome-span"></span>
+    </div>
+    <div class="profile-field">
+      <label>E-mail:</label>
+      <span id="email-span"></span>
+    </div>
+    <div class="profile-field">
+      <label>Telefone:</label>
+      <span id="telefone-span"></span>
+      <input type="text" id="telefone-input" placeholder="(XX) X XXXX-XXXX" />
+      <button id="save-btn">Salvar Telefone</button>
+      <button id="finish-register-btn">Terminar Registro</button>
+    </div>
+  </div>
+
+  <script>
+    let loggedUser = null; // Usaremos esta variável para armazenar o usuário logado
+
+    // Tenta carregar o usuário logado do localStorage
+    try {
+      const userString = localStorage.getItem('loggedUser'); // Busca pela chave correta
+      if (userString) {
+        loggedUser = JSON.parse(userString);
+      }
+    } catch (e) {
+      console.error("Erro ao analisar 'loggedUser' do localStorage:", e);
+      // Se houver erro na análise, loggedUser permanecerá null
+    }
+
+    // Verifica se o usuário está logado
+    if (!loggedUser) {
+      alert("Você não está logado.");
+      location.href = "login.html"; // Redireciona para a página de login
+    } else {
+      // Se estiver logado, preenche os dados e configura os eventos
+      document.getElementById("welcome-msg").textContent = `Bem-vindo, ${loggedUser.nome}`;
+      document.getElementById("nome-span").textContent = loggedUser.nome || "";
+      document.getElementById("email-span").textContent = loggedUser.email || "";
+
+      const telSpan = document.getElementById("telefone-span");
+      const telInput = document.getElementById("telefone-input");
+      const saveBtn = document.getElementById("save-btn");
+      const finishRegisterBtn = document.getElementById("finish-register-btn");
+
+      if (loggedUser.telefone) {
+        telSpan.textContent = loggedUser.telefone;
+        telInput.style.display = saveBtn.style.display = "none";
+      } else {
+        telSpan.style.display = "none";
+      }
+
+      saveBtn.addEventListener("click", () => {
+        const v = telInput.value.trim();
+        if (!v) {
+          alert("Digite um telefone válido.");
+          return;
+        }
+        loggedUser.telefone = v; // Atualiza o objeto loggedUser
+        localStorage.setItem("loggedUser", JSON.stringify(loggedUser)); // Salva o objeto atualizado no localStorage
+        telSpan.textContent = v;
+        telSpan.style.display = "block";
+        telInput.style.display = saveBtn.style.display = "none";
+      });
+
+      finishRegisterBtn.addEventListener("click", () => {
+        window.location.href = "finalizar-registro.html";
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        localStorage.removeItem("loggedUser"); // Remove a chave correta ao fazer logout
+        location.href = "index.html"; // Redireciona para a página inicial
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registrar - OnibusCuiaba</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-image: url('Cuiaba.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
+    .navbar {
+      background-color: rgba(52, 152, 219, 0.8);
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .navbar .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .navbar button {
+      background: white;
+      color: #3498db;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .navbar button:hover {
+      background-color: #d6eaf8;
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 300px;
+      margin: 40px auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #3498db;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #1b4f72;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .link a {
+      text-decoration: none;
+      color: #3498db;
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho (Navbar) -->
+  <div class="navbar">
+    <h2>OnibusCuiabá</h2>
+    <div class="nav-buttons">
+      <button onclick="window.location.href='login.html'">Entrar</button>
+      <button onclick="window.location.href='registrar.html'">Registrar</button>
+    </div>
+  </div>
+
+  <!-- Formulário de Registro -->
+  <div class="form-box">
+    <h2>Registrar</h2>
+    <input type="text" id="nome" placeholder="Nome completo" required />
+    <input type="email" id="email" placeholder="E-mail" required />
+    <input type="password" id="senha" placeholder="Senha" required />
+    <button onclick="registrar()">Registrar</button>
+    <div class="link">
+      <a href="index.html">Voltar ao início</a>
+    </div>
+  </div>
+
+  <script>
+    function registrar() {
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      if (!nome || !email || !senha) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      // Tenta obter a lista de usuários existente do localStorage
+      let usuarios = [];
+      try {
+        const usuariosString = localStorage.getItem('usuarios');
+        if (usuariosString) {
+          usuarios = JSON.parse(usuariosString);
+          // Garante que é um array, caso o JSON.parse retorne algo diferente
+          if (!Array.isArray(usuarios)) {
+            usuarios = [];
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao carregar usuários do localStorage:", e);
+        usuarios = []; // Em caso de erro, inicializa como array vazio
+      }
+
+      // Verifica se o e-mail já está cadastrado
+      const emailExistente = usuarios.find(u => u.email === email);
+      if (emailExistente) {
+        alert("Este e-mail já está cadastrado. Por favor, use outro.");
+        return;
+      }
+
+      // Cria o novo objeto de usuário
+      const novoUsuario = { nome, email, senha, role: 'user' }; // Adicionei 'role: user' por padrão
+
+      // Adiciona o novo usuário à lista
+      usuarios.push(novoUsuario);
+
+      // Salva a lista atualizada de usuários de volta no localStorage
+      localStorage.setItem("usuarios", JSON.stringify(usuarios)); // <-- Chave corrigida para "usuarios" (plural)
+
+      alert("Registro realizado com sucesso!");
+      window.location.href = "login.html"; // Redireciona para a página de login após o registro
+    }
+  </script>
+</body>
+</html>
